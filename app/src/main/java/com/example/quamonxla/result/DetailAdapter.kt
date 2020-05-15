@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quamonxla.R
 import kotlinx.android.synthetic.main.item_detail.view.*
 
-class DetailAdapter(val detailList: Array<String>) : RecyclerView.Adapter<DetailAdapter.DetailHolder>() {
-
+class DetailAdapter( list: Array<String>) : RecyclerView.Adapter<DetailAdapter.DetailHolder>() {
+    val detailList = list.filter {
+        it != ""
+    }
 
     class DetailHolder(v: View) : RecyclerView.ViewHolder(v) {
         companion object {

@@ -11,6 +11,8 @@ import android.widget.EditText
 import android.widget.TableRow
 import android.widget.TextView
 import com.example.quamonxla.R
+import com.example.quamonxla.main.FilterHelper
+import com.example.quamonxla.main.HistogramSheet
 import com.example.quamonxla.main.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_result.view.*
@@ -28,7 +30,11 @@ class ResultFragment : Fragment() {
 
 
     private fun init(v: View) {
-        val resultMatrix = (activity as ResultActivity).resultMatrix
+        val resultActivity = activity as ResultActivity
+
+        val resultMatrix = resultActivity.resultMatrix
+
+
 
         val rowNum = resultMatrix.size
         val colNum = resultMatrix[0].size
@@ -48,6 +54,13 @@ class ResultFragment : Fragment() {
             }
 
             table.addView(row)
+        }
+
+
+        v.showHist.setOnClickListener {
+            val width = resultMatrix.get(0).size
+            val histogram = FilterHelper(width).tinhHistogram(resultMatrix)
+            HistogramSheet(histogram).show((activity as ResultActivity).supportFragmentManager,"histogram")
         }
     }
 

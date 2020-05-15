@@ -42,7 +42,7 @@ class FilterHelper(var colNum: Int) {
             }
         }
         val pixel = min
-        mangPhepTinh[x*colNum + y] = "Min trong không gian ${mauKhongGian.showValue()} là $pixel"
+        mangPhepTinh[x*colNum + y] = "[$x,$y]: Min trong không gian ${mauKhongGian.showValue()} là $pixel"
         return pixel
     }
 
@@ -56,19 +56,20 @@ class FilterHelper(var colNum: Int) {
             }
         }
         val pixel = max
-
+         mangPhepTinh[x*colNum + y] = "[$x,$y]: Max trong không gian ${mauKhongGian.showValue()} là $pixel"
         return pixel
     }
 
      fun locTB(x: Int, y: Int,matrix: Array<IntArray>,mangPhepTinh: Array<String>): Int {
          val mauKhongGian = layMauKhongGian(matrix,x,y)
         var sum = 0
+         var str = ""
         for (j in 0..8) {
-
+            str += "+ ${mauKhongGian[j].toString()}"
             sum += mauKhongGian[j]
         }
         val avg = sum / 9
-
+         mangPhepTinh[x*colNum + y] = "\\([$x,$y]: \\frac{ ${str} }{9} = $avg\\)"
         return avg
     }
 
@@ -97,6 +98,38 @@ class FilterHelper(var colNum: Int) {
         val avg = sum / sumWeight
 
         return avg
+    }
+
+
+    fun locMidpoint(x: Int, y: Int,matrix: Array<IntArray>,mangPhepTinh: Array<String>): Int {
+        return 0
+    }
+
+
+    fun canBangHistogram(x: Int, y: Int,matrix: Array<IntArray>,mangPhepTinh: Array<String>): Int {
+        return 0
+    }
+
+    fun tinhHistogram(matrix: Array<IntArray>): MutableMap<Int,Int> {
+        val pixelCount = Array<Int>(255) {0}
+        matrix.forEach { row ->
+            row.forEach { value ->
+                pixelCount[value] += 1
+            }
+        }
+        val result = mutableMapOf<Int,Int>()
+        pixelCount.forEachIndexed { index, i ->
+            if (i != 0) {
+                result[index] = i
+            }
+
+        }
+        return result.toSortedMap()
+    }
+
+
+    fun locCustom(): Int {
+        return 0
     }
 
 }

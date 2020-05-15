@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
     lateinit var resultMatrix: Array<IntArray>
     lateinit var calculateArr: Array<String>
     lateinit private var table: TableLayout
-    var filterTypeId = R.id.min
+    var filterTypeId = R.id.avg
     private var currentRow = 0
     private var currentCol = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +87,14 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
         chooseFilter.setOnClickListener {
             FilterBottomSheet().show(supportFragmentManager,"filter")
         }
+
+
+        histogramShow.setOnClickListener {
+            if (checkfillAll()) {
+                val tinhHistogram = filterHelper.tinhHistogram(matrix)
+                HistogramSheet(tinhHistogram).show(supportFragmentManager,"histogram")
+            }
+        }
     }
 
 
@@ -107,12 +115,6 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
                 resultMatrix[i][j] = pixel
             }
         }
-//        // test
-//        resultMatrix.forEach {
-//            it.forEach {
-//                Log.i("",it.toString())
-//            }
-//        }
 
 
     }
@@ -151,12 +153,7 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
        return when (item.itemId) {
             R.id.check -> {
-                val isFillAll = matrix.all { row ->
-                    row.all {
-                        it != -1
-                    }
-                }
-                if (isFillAll) {
+                if (checkfillAll()) {
                     val intent = Intent(this,ResultActivity::class.java)
                     intent.putExtra(EXTRA_RESULT_MATRIX, resultMatrix)
                     intent.putExtra(EXTRA_CALCULATE_ARR, calculateArr)
@@ -165,16 +162,22 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
                         startActivity(intent)
                     }
 
-                } else {
-                    Toast.makeText(this,"Chưa nhập đủ ma trận",Toast.LENGTH_SHORT).show()
                 }
-
                 return true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
 
 
+    private fun checkfillAll(): Boolean {
+        val isFill =  matrix.all { row ->
+            row.all {
+                it != -1
+            }
+        }
+        if (!isFill) Toast.makeText(this,"Chưa nhập đủ ma trận",Toast.LENGTH_SHORT).show()
 
+        return isFill
     }
 }

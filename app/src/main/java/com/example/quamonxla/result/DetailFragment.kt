@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quamonxla.R
+import com.example.quamonxla.main.HistogramSheet
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 
 
@@ -22,6 +23,7 @@ class DetailFragment : Fragment() {
         val calculateArr = (activity as ResultActivity).calculateArr
         recycler.adapter = DetailAdapter(calculateArr)
         recycler.layoutManager = LinearLayoutManager(context)
+
         return v
     }
 
