@@ -2,52 +2,198 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="25dp"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <com.google.android.material.chip.ChipGroup
+    <com.google.android.material.chip.ChipGroup
                 android:id="@+id/filterGroup"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:singleSelection="true"
-                app:singleLine="true">
+                android:layout_height="wrap_content"
+                app:chipSpacing="5dp"
+                app:singleLine="false"
+                app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
+        <com.google.android.material.chip.Chip
+            android:id="@+id/dhtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ĐH tương phản"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipMinHeight="48dp" />
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/dieuHoa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Điều hoà"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipMinHeight="48dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/geo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Geometric"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipMinHeight="48dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/trongSo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TB trọng số"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipMinHeight="48dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/midpoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:text="MidPoint"
+            app:chipMinHeight="48dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/customFilter"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nhập bộ lọc tự chọn 3x3"
+            android:textAlignment="center"
+            app:chipMinHeight="48dp" />
+
+        <com.google.android.material.chip.Chip
                     android:id="@+id/avg"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:text="Trung bình" />
+                    android:text="Trung bình"
+                    android:textAlignment="center"
+                    app:chipMinHeight="48dp" />
 
-                <com.google.android.material.chip.Chip
+        <com.google.android.material.chip.Chip
                     android:id="@+id/median"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:text="Trung vị" />
+                    android:text="Trung vị"
+                    app:chipMinHeight="48dp" />
 
-                <com.google.android.material.chip.Chip
+        <com.google.android.material.chip.Chip
                     android:id="@+id/min"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:text="Min" />
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+                    android:text="Min"
+                    app:chipMinHeight="48dp" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/max"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:text="Max" />
-            </com.google.android.material.chip.ChipGroup>
-        </LinearLayout>
-    </ScrollView>
+
+                    android:text="Max"
+                    app:chipMinHeight="48dp" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <EditText
+        android:id="@+id/qValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Nhập Q"
+        android:inputType="numberSigned|number"
+        android:visibility="gone" />
+
+    <TableLayout
+        android:id="@+id/filterTable"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned|number" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned|number" />
+
+            <EditText
+                android:id="@+id/editText3"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned|number" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/editText4"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned|number" />
+
+            <EditText
+                android:id="@+id/editText5"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned|number" />
+
+            <EditText
+                android:id="@+id/editText6"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned|number" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/a31"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned|number" />
+
+            <EditText
+                android:id="@+id/editText8"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned|number" />
+
+            <EditText
+                android:id="@+id/editText9"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned|number" />
+        </TableRow>
+
+    </TableLayout>
+
 </LinearLayout>

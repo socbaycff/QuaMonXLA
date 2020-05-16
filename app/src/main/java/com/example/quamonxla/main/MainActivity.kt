@@ -20,6 +20,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.quamonxla.R
 import com.example.quamonxla.StartActivity
 import com.example.quamonxla.result.ResultActivity
+import com.example.quamonxla.util.SharePreFlag
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,8 +32,13 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
 
     companion object {
         const val EXTRA_RESULT_MATRIX = "extra_result_matrix"
-        const val EXTRA_CALCULATE_ARR  = "extra_calculate_arr"
+        const val EXTRA_CALCULATE_ARR = "extra_calculate_arr"
     }
+
+    val heSoFilter by lazy {
+        Array<Int>(9) { 0 }
+    }
+
     private lateinit var filterHelper: FilterHelper
     private var width: Int = 0
     private var height: Int = 0
@@ -44,9 +52,21 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val toolbar = toolb
+        toolbar.inflateMenu(R.menu.menu_option)
+       setSupportActionBar(toolbar)
         val supportActionBar = supportActionBar
         supportActionBar?.title = "Nhập ma trận"
         supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
+
+        if (SharePreFlag.showMain()) {
+            TapTargetSequence(this).targets(
+                TapTarget.forView(tableLayout,"Nhập ma trận").cancelable(false).targetRadius(100).transparentTarget(true).drawShadow(true),
+                TapTarget.forView(histogramShow,"Xem histogram").cancelable(false).transparentTarget(true).drawShadow(true),
+                TapTarget.forView(chooseFilter,"Chọn bộ lọc").cancelable(false).transparentTarget(true).drawShadow(true),
+                TapTarget.forToolbarMenuItem(toolb,R.id.check,"Xem kết quả").cancelable(false).transparentTarget(true).drawShadow(true)
+            ).start()
+        }
 
         init()
     }
@@ -55,20 +75,20 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
     private fun init() {
 
         val intent = intent
-        width = intent.getIntExtra(StartActivity.ROW_NUM,0)
-        height = intent.getIntExtra(StartActivity.COL_NUM,0)
+        width = intent.getIntExtra(StartActivity.ROW_NUM, 0)
+        height = intent.getIntExtra(StartActivity.COL_NUM, 0)
         filterHelper = FilterHelper(width)
         // init array
-        matrix = Array(height) { IntArray(width) {-1} } // default value la -1
+        matrix = Array(height) { IntArray(width) { -1 } } // default value la -1
         resultMatrix = matrix.copyOf()
-        calculateArr = Array(height*width) { "" }
+        calculateArr = Array(height * width) { "" }
 
 
         // init table layout
         table = tableLayout
-        for (i in 0..height-1) {
+        for (i in 0..height - 1) {
             val row = TableRow(this)
-            for (j in 0..width-1) {
+            for (j in 0..width - 1) {
                 row.addView(EditText(this).apply {
                     setText("X")
                     inputType = InputType.TYPE_CLASS_NUMBER
@@ -85,34 +105,52 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
         }
 
         chooseFilter.setOnClickListener {
-            FilterBottomSheet().show(supportFragmentManager,"filter")
+            FilterBottomSheet(heSoFilter,filterHelper).show(supportFragmentManager, "filter")
         }
 
 
         histogramShow.setOnClickListener {
             if (checkfillAll()) {
                 val tinhHistogram = filterHelper.tinhHistogram(matrix)
-                HistogramSheet(tinhHistogram).show(supportFragmentManager,"histogram")
+                HistogramSheet(tinhHistogram).show(supportFragmentManager, "histogram")
             }
         }
     }
 
 
-
-
     fun startFilter() {
         // travel from (1,1) toi (row-1,col-1)
-        val phepLoc = when (filterTypeId) {
-            R.id.avg -> FilterHelper::locTB
-            R.id.max -> FilterHelper::locMax
-            R.id.median -> FilterHelper::locTrungVi
-            else -> FilterHelper::locMin
-        }
-        var pixel = -1
-        for (i in 1..height-2) {
-            for (j in 1..width-2) {
-                pixel = phepLoc.invoke(filterHelper,i,j,matrix,calculateArr)
-                resultMatrix[i][j] = pixel
+        if (filterTypeId == R.id.customFilter || filterTypeId == R.id.trongSo) {
+
+            val phepLoc = when (filterTypeId) {
+                R.id.customFilter -> FilterHelper::locCustom
+                else -> FilterHelper::locTBTrongSo
+            }
+            var pixel = -1
+            for (i in 1..height - 2) {
+                for (j in 1..width - 2) {
+                    pixel = phepLoc.invoke(filterHelper, i, j, matrix, calculateArr,heSoFilter)
+                    resultMatrix[i][j] = pixel
+                }
+            }
+
+        } else {
+            val phepLoc = when (filterTypeId) {
+                R.id.avg -> FilterHelper::locTB
+                R.id.max -> FilterHelper::locMax
+                R.id.median -> FilterHelper::locTrungVi
+                R.id.midpoint -> FilterHelper::locMidpoint
+                R.id.geo -> FilterHelper::locGeo
+                R.id.dieuHoa -> FilterHelper::locDH
+                R.id.dhtp -> FilterHelper::locDHTP
+                else -> FilterHelper::locMin
+            }
+            var pixel = -1
+            for (i in 1..height - 2) {
+                for (j in 1..width - 2) {
+                    pixel = phepLoc.invoke(filterHelper, i, j, matrix, calculateArr)
+                    resultMatrix[i][j] = pixel
+                }
             }
         }
 
@@ -124,12 +162,15 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
         // save index of selected cell
         if (hasFocus) {
             val editText = v as EditText
-            if (editText.text.toString() == "X") {editText.setText("")}
+            if (editText.text.toString() == "X") {
+                editText.setText("")
+            }
             val row = v.parent
             currentRow = table.indexOfChild(row as View)
             currentCol = (row as TableRow).indexOfChild(v)
         }
     }
+
     override fun afterTextChanged(s: Editable?) {
         val string = s.toString()
         if (string != "") {
@@ -144,17 +185,16 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
     }
 
 
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_option,menu)
+        menuInflater.inflate(R.menu.menu_option, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-       return when (item.itemId) {
+        return when (item.itemId) {
             R.id.check -> {
                 if (checkfillAll()) {
-                    val intent = Intent(this,ResultActivity::class.java)
+                    val intent = Intent(this, ResultActivity::class.java)
                     intent.putExtra(EXTRA_RESULT_MATRIX, resultMatrix)
                     intent.putExtra(EXTRA_CALCULATE_ARR, calculateArr)
                     lifecycleScope.launch(Dispatchers.Default) {
@@ -171,12 +211,12 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
 
 
     private fun checkfillAll(): Boolean {
-        val isFill =  matrix.all { row ->
+        val isFill = matrix.all { row ->
             row.all {
                 it != -1
             }
         }
-        if (!isFill) Toast.makeText(this,"Chưa nhập đủ ma trận",Toast.LENGTH_SHORT).show()
+        if (!isFill) Toast.makeText(this, "Chưa nhập đủ ma trận", Toast.LENGTH_SHORT).show()
 
         return isFill
     }

@@ -23,7 +23,7 @@ class HistogramRecyclerAdapter( histogram: MutableMap<Int,Int>) : RecyclerView.A
 
 
         fun bind(entry: MutableMap.MutableEntry<Int, Int>) {
-            itemView.pixelValueTV.text = "Màu ${entry.key}: ${entry.value}"
+            itemView.pixelValueTV.text = "Pixel ${entry.key}: ${entry.value}"
         }
     }
 

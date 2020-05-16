@@ -8,6 +8,17 @@
     android:focusableInTouchMode="true"
     tools:context=".main.MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFB300"
+        android:backgroundTint="#FFB300"
+        android:foregroundTint="#FFB300"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <HorizontalScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
@@ -18,8 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/toolb">
 
         <ScrollView
             android:layout_width="fill_parent"
@@ -46,6 +56,8 @@
         android:gravity="center"
         android:text="Chọn Bộ lọc"
         android:textAlignment="center"
+        android:textSize="18sp"
+        app:chipMinHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -60,6 +72,8 @@
         android:layout_marginBottom="16dp"
         android:text="Xem histogram"
         android:textAlignment="center"
+        android:textSize="18sp"
+        app:chipMinHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/chooseFilter"
         app:layout_constraintHorizontal_bias="0.5"

@@ -8,7 +8,7 @@
     <io.github.kexanie.library.MathView
         android:id="@+id/detail_text"
         app:engine="KaTeX"
-        android:layout_width="700dp"
+        android:layout_width="500dp"
         android:layout_height="wrap_content" />
 
 

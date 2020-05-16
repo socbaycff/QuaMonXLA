@@ -1,16 +1,13 @@
 package com.example.quamonxla.result
 
 import android.os.Bundle
-import android.text.InputType
-import android.view.Gravity
 import android.view.MenuItem
-import android.widget.EditText
-import android.widget.TableRow
 import androidx.appcompat.app.AppCompatActivity
 import com.example.quamonxla.R
-import com.example.quamonxla.StartActivity
 import com.example.quamonxla.main.MainActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.quamonxla.util.SharePreFlag
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import kotlinx.android.synthetic.main.activity_result.*
 
 class ResultActivity : AppCompatActivity() {
@@ -27,7 +24,11 @@ class ResultActivity : AppCompatActivity() {
         viewpager.adapter = ResultPagerAdapter(supportFragmentManager)
 
         tabLayout.setupWithViewPager(viewpager)
-
+        if (SharePreFlag.showResult()) {
+            TapTargetSequence(this).targets(
+                TapTarget.forView(tabLayout,"Chọn chế độ xem kết quả").cancelable(false).transparentTarget(true).drawShadow(true)
+            ).start()
+        }
 
         init()
     }
@@ -36,9 +37,6 @@ class ResultActivity : AppCompatActivity() {
         val extra = intent.extras
         resultMatrix = extra?.get(MainActivity.EXTRA_RESULT_MATRIX) as Array<IntArray>
         calculateArr = extra?.get(MainActivity.EXTRA_CALCULATE_ARR) as Array<String>
-
-
-
 
     }
 

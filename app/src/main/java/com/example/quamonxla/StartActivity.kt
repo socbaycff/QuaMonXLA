@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.ActionBar
 import com.example.quamonxla.main.MainActivity
+import com.example.quamonxla.util.SharePreFlag
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import kotlinx.android.synthetic.main.activity_start.*
 
 class StartActivity : AppCompatActivity() {
@@ -23,11 +26,13 @@ class StartActivity : AppCompatActivity() {
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.action_bar)
 
-//        TapTargetSequence(this).targets(
-//            TapTarget.forView(rowNumEditText,"1. Nhập số dòng của ma trận").cancelable(false).transparentTarget(true).drawShadow(true),
-//            TapTarget.forView(colNumEditText,"2. Nhập số cột của ma trận").cancelable(false).transparentTarget(true).drawShadow(true),
-//            TapTarget.forView(nextBtn,"3. Nhấn để tiếp tục nhập ma trận").cancelable(false).transparentTarget(true).drawShadow(true)
-//        ).start()
+        if (SharePreFlag.showStart()) {
+            TapTargetSequence(this).targets(
+                TapTarget.forView(rowNumEditText,"1. Nhập số dòng của ma trận").cancelable(false).transparentTarget(true).drawShadow(true),
+                TapTarget.forView(colNumEditText,"2. Nhập số cột của ma trận").cancelable(false).transparentTarget(true).drawShadow(true),
+                TapTarget.forView(nextBtn,"3. Nhấn để tiếp tục nhập ma trận").cancelable(false).transparentTarget(true).drawShadow(true)
+            ).start()
+        }
     }
 
 
