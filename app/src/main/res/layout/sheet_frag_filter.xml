@@ -1,57 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:padding="25dp"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="25dp">
 
 
     <com.google.android.material.chip.ChipGroup
-                android:id="@+id/filterGroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:chipSpacing="5dp"
-                app:singleLine="false"
-                app:singleSelection="true">
+        android:id="@+id/filterGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:chipSpacing="5dp"
+        app:singleLine="false"
+        app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/dhtp"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ĐH tương phản"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
             app:chipMinHeight="48dp" />
 
 
         <com.google.android.material.chip.Chip
             android:id="@+id/dieuHoa"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Điều hoà"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
             app:chipMinHeight="48dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/geo"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Geometric"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
             app:chipMinHeight="48dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/trongSo"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TB trọng số"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
             app:chipMinHeight="48dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/midpoint"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
             android:text="MidPoint"
             app:chipMinHeight="48dp" />
 
@@ -65,39 +66,48 @@
             app:chipMinHeight="48dp" />
 
         <com.google.android.material.chip.Chip
-                    android:id="@+id/avg"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Trung bình"
-                    android:textAlignment="center"
-                    app:chipMinHeight="48dp" />
+            android:id="@+id/avg"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trung bình"
+            android:textAlignment="center"
+            app:chipMinHeight="48dp" />
 
         <com.google.android.material.chip.Chip
-                    android:id="@+id/median"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Trung vị"
-                    app:chipMinHeight="48dp" />
+            android:id="@+id/median"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trung vị"
+            app:chipMinHeight="48dp" />
 
         <com.google.android.material.chip.Chip
-                    android:id="@+id/min"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
+            android:id="@+id/min"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
 
-                    android:layout_height="wrap_content"
-                    android:text="Min"
-                    app:chipMinHeight="48dp" />
+            android:layout_height="wrap_content"
+            android:text="Min"
+            app:chipMinHeight="48dp" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/max"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+        <com.google.android.material.chip.Chip
+            android:id="@+id/max"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-                    android:text="Max"
-                    app:chipMinHeight="48dp" />
+            android:text="Max"
+            app:chipMinHeight="48dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/alpha"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Alpha Trimmed"
+            app:chipMinHeight="48dp" />
 
     </com.google.android.material.chip.ChipGroup>
 
@@ -106,15 +116,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Nhập Q"
+        android:hint="Nhập tham số bộ lọc"
         android:inputType="numberSigned|number"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/filterLable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nhập hệ số bộ lọc"
+        android:textSize="18sp"
         android:visibility="gone" />
 
     <TableLayout
         android:id="@+id/filterTable"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <TableRow
             android:layout_width="wrap_content"

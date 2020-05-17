@@ -1,12 +1,14 @@
 package com.example.quamonxla.main
 
+import ch.obermuhlner.math.big.BigDecimalMath
 import com.example.quamonxla.util.showValue
-import java.util.concurrent.atomic.LongAdder
+import java.math.BigDecimal
+import java.math.MathContext
 import kotlin.math.pow
-import kotlin.math.sqrt
 
 class FilterHelper(var colNum: Int) {
     var qValue: Int = 1
+    var dValue = 0
 
     /**
      * chuyen doi tu ma tran sang mang
@@ -45,9 +47,11 @@ class FilterHelper(var colNum: Int) {
                 min = mauKhongGian[j]
             }
         }
-        val pixel = min
+        var pixel = min
         mangPhepTinh[x * colNum + y] =
             "[$x,$y]: Min trong không gian ${mauKhongGian.showValue()} là $pixel"
+        if (pixel < 0) pixel = 0
+        if (pixel > 255) pixel = 255
         return pixel
     }
 
@@ -60,9 +64,11 @@ class FilterHelper(var colNum: Int) {
                 max = mauKhongGian[j]
             }
         }
-        val pixel = max
+        var pixel = max
         mangPhepTinh[x * colNum + y] =
             "[$x,$y]: Max trong không gian ${mauKhongGian.showValue()} là $pixel"
+        if (pixel < 0) pixel = 0
+        if (pixel > 255) pixel = 255
         return pixel
     }
 
@@ -74,8 +80,10 @@ class FilterHelper(var colNum: Int) {
             str += "+ ${mauKhongGian[j].toString()}"
             sum += mauKhongGian[j]
         }
-        val avg = sum / 9
-        mangPhepTinh[x * colNum + y] = "\\([$x,$y]: \\frac{ ${str} }{9} = $avg\\)"
+        var avg = sum / 9
+        mangPhepTinh[x * colNum + y] = "\\([$x,$y]: \\frac{ ${str.substring(1)} }{9} = $avg\\)"
+        if (avg < 0) avg = 0
+        if (avg > 255) avg = 255
         return avg
     }
 
@@ -88,7 +96,10 @@ class FilterHelper(var colNum: Int) {
         val sortedArray = arrayList.sortedArray()
         mangPhepTinh[x * colNum + y] =
             "[$x,$y]: Giá trị trung vị trong ${sortedArray.showValue()} là ${sortedArray[4]} "
-        return sortedArray[4]
+        var result = sortedArray[4]
+        if (sortedArray[4] < 0) result = 0
+        if (sortedArray[4] > 255) result = 255
+        return result
     }
 
 
@@ -96,23 +107,29 @@ class FilterHelper(var colNum: Int) {
         val mauKhongGian = layMauKhongGian(matrix, x, y)
         val min = mauKhongGian.min()!!
         val max = mauKhongGian.max()!!
-        val midpoint = (max + min) / 2
+        var midpoint = (max + min) / 2
         mangPhepTinh[x * colNum + y] =
             "\\([$x,$y]: Max:$max Min:$min => \\frac{$max + $min}{2} = $midpoint\\)"
+
+        if (midpoint < 0) midpoint = 0
+        if (midpoint > 255) midpoint = 255
         return midpoint
 
     }
 
     fun locGeo(x: Int, y: Int, matrix: Array<IntArray>, mangPhepTinh: Array<String>): Int {
         val mauKhongGian = layMauKhongGian(matrix, x, y)
-        var product: Long = 1
+        var product = BigDecimal(1)
         var str = ""
         for (j in 0..8) {
             str += ".${mauKhongGian[j]}"
-            product *= mauKhongGian[j]
+            product = product.multiply(BigDecimal.valueOf(mauKhongGian[j].toLong()))
         }
-        val pixel = product.toDouble().pow((1.0 / 9)).toInt()
+        val mathContext = MathContext(25)
+        var pixel = BigDecimalMath.root(product, BigDecimal.valueOf(9.0),mathContext).toInt()
         mangPhepTinh[x * colNum + y] = "\\([$x,$y]: \\sqrt[9]{ ${str.substring(1)} } = $pixel \\)"
+        if (pixel < 0) pixel = 0
+        if  (pixel > 255) pixel = 255
         return pixel
 
     }
@@ -136,6 +153,43 @@ class FilterHelper(var colNum: Int) {
     }
 
 
+
+    fun locDH(x: Int, y: Int, matrix: Array<IntArray>, mangPhepTinh: Array<String>): Int {
+        val mauKhongGian = layMauKhongGian(matrix, x, y)
+        var mauSo: Double = 0.0
+        var str = ""
+        for (j in 0..8) {
+            str += "+ \\frac{1}{ ${mauKhongGian[j]} }"
+            mauSo += (1.0 / mauKhongGian[j])
+        }
+        var result = (9 / mauSo).toInt()
+        mangPhepTinh[x * colNum + y] = "\\( [$x,$y]: \\frac{9}{ ${str.substring(2)} } = $result \\)"
+        if (result < 0) result = 0
+        if (result > 255) result = 255
+        return result
+    }
+
+    fun locDHTP(x: Int, y: Int, matrix: Array<IntArray>, mangPhepTinh: Array<String>): Int {
+        val mauKhongGian = layMauKhongGian(matrix, x, y)
+        var tuSo = 0.0
+        var mauSo = 0.0
+        var strMau = ""
+        var strTu = ""
+        for (j in 0..8) {
+            strMau += "+ ${mauKhongGian[j]}^${qValue}"
+            strTu += "+ ${mauKhongGian[j]}^${qValue + 1}"
+            mauSo += mauKhongGian[j].toDouble().pow(qValue)
+            tuSo += mauKhongGian[j].toDouble().pow(qValue + 1)
+        }
+        var result = (tuSo / mauSo).toInt()
+        mangPhepTinh[x * colNum + y] =
+            "\\( [$x,$y]: \\frac{ ${strTu.substring(1)} }{ ${strMau.substring(1)} } = $result \\)"
+        if (result < 0) result = 0
+        if (result > 255) result = 255
+        return result
+    }
+
+
     fun locTBTrongSo(
         x: Int,
         y: Int,
@@ -153,41 +207,12 @@ class FilterHelper(var colNum: Int) {
             str += "+ ${filter[j]}.${mauKhongGian[j]}"
             sum += filter[j] * mauKhongGian[j] // nhan voi trong so
         }
-        val avg = sum / sumWeight
+        var avg = sum / sumWeight
         mangPhepTinh[x * colNum + y] =
             "\\( [$x,$y]: \\frac{ ${str.substring(2)} }{ $sumWeight } = $avg \\)"
+        if (avg < 0) avg = 0
+        if (avg > 255) avg = 255
         return avg
-    }
-
-    fun locDH(x: Int, y: Int, matrix: Array<IntArray>, mangPhepTinh: Array<String>): Int {
-        val mauKhongGian = layMauKhongGian(matrix, x, y)
-        var mauSo: Double = 0.0
-        var str = ""
-        for (j in 0..8) {
-            str += "+ \\frac{1}{ ${mauKhongGian[j]} }"
-            mauSo += (1.0 / mauKhongGian[j])
-        }
-        val result = (9 / mauSo).toInt()
-        mangPhepTinh[x * colNum + y] = "\\( [$x,$y]: \\frac{9}{ ${str.substring(2)} } = $result \\)"
-        return result
-    }
-
-    fun locDHTP(x: Int, y: Int, matrix: Array<IntArray>, mangPhepTinh: Array<String>): Int {
-        val mauKhongGian = layMauKhongGian(matrix, x, y)
-        var tuSo = 0.0
-        var mauSo = 0.0
-        var strMau = ""
-        var strTu = ""
-        for (j in 0..8) {
-            strMau += "+ ${mauKhongGian[j]}^${qValue}"
-            strTu += "+ ${mauKhongGian[j]}^${qValue + 1}"
-            mauSo += mauKhongGian[j].toDouble().pow(qValue)
-            tuSo += mauKhongGian[j].toDouble().pow(qValue + 1)
-        }
-        val result = (tuSo / mauSo).toInt()
-        mangPhepTinh[x * colNum + y] =
-            "\\( [$x,$y]: \\frac{ ${strTu.substring(1)} }{ ${strMau.substring(1)} } = $result \\)"
-        return result
     }
 
     fun locCustom(
@@ -206,6 +231,31 @@ class FilterHelper(var colNum: Int) {
         }
 
         mangPhepTinh[x * colNum + y] = "[$x,$y]: ${str.substring(2)} = $result"
+        if (result <0) result = 0
+        if (result > 255) result = 255
+        return result
+    }
+
+
+    fun alphaTrim(x: Int, y: Int, matrix: Array<IntArray>, mangPhepTinh: Array<String>): Int {
+        val mauKhongGian = layMauKhongGian(matrix, x, y)
+        val arrayList = Array<Int>(9) { -1 }
+        for (j in 0..8) {
+            arrayList[j] = mauKhongGian[j]
+        }
+        val sortedArray = arrayList.sortedArray()
+        var sum = 0
+        var str = ""
+        for (i in (0+dValue/2)..(8-dValue/2)  ) {
+            str += "+ ${sortedArray[i]}"
+           sum += sortedArray[i]
+        }
+
+        var result = sum/ (9-dValue)
+        mangPhepTinh[x * colNum + y] =
+            "\\([$x,$y]:  \\frac{ ${str.substring(1)} }{ ${9-dValue} } = $result \\)"
+        if (result <0) result = 0
+        if (result > 255) result = 255
         return result
     }
 

@@ -21,6 +21,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -47,4 +52,8 @@ dependencies {
     //mathview
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'io.github.kexanie.library:MathView:0.0.6'
+    //cat load view
+    implementation 'com.roger.catloadinglibrary:catloadinglibrary:1.0.5'
+    //big de
+    implementation 'ch.obermuhlner:big-math:2.3.0'
 }

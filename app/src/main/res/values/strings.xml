@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">QuaMonXLA</string>
+    <string name="app_name">Phao Bài</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="message">1.Giá trị pixel viền không được xử lý (hàng 0, cột 0, hàng cuối, cột cuối), tự điều chỉnh giá trị ma trận gốc để xử lý viền(vd nhân đôi viền ma trận)\n 2.Giá trị lớn hơn 255 hoặc bé hơn 0 sẽ tự điều chỉnh thành 255 hoặc 0</string>
 </resources>

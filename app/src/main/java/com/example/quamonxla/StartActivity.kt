@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import com.example.quamonxla.main.MainActivity
 import com.example.quamonxla.util.SharePreFlag
@@ -39,10 +40,15 @@ class StartActivity : AppCompatActivity() {
     fun next(v: View) {
         val row = rowNumEditText.text.toString()
         val col = colNumEditText.text.toString()
-        if ( row != "" && col != "")
-        startActivity(Intent(this, MainActivity::class.java).apply {
-            putExtra(ROW_NUM,row.toInt())
-            putExtra(COL_NUM,col.toInt())
-        })
+        if ( row != "" && col != "") {
+            startActivity(Intent(this, MainActivity::class.java).apply {
+                putExtra(ROW_NUM,row.toInt())
+                putExtra(COL_NUM,col.toInt())
+            })
+
+        } else {
+            Toast.makeText(applicationContext,"Chưa nhập đủ",Toast.LENGTH_SHORT).show()
+        }
+
     }
 }

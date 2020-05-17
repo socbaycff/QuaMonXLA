@@ -62,6 +62,8 @@ class ResultFragment : Fragment() {
             val histogram = FilterHelper(width).tinhHistogram(resultMatrix)
             HistogramSheet(histogram).show((activity as ResultActivity).supportFragmentManager,"histogram")
         }
+
+        MainActivity.catView.dismiss()
     }
 
 

@@ -2,6 +2,7 @@ package com.example.quamonxla.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.os.SystemClock
 import android.text.Editable
 import android.text.InputType
@@ -23,6 +24,7 @@ import com.example.quamonxla.result.ResultActivity
 import com.example.quamonxla.util.SharePreFlag
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.roger.catloadinglibrary.CatLoadingView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,6 +35,9 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
     companion object {
         const val EXTRA_RESULT_MATRIX = "extra_result_matrix"
         const val EXTRA_CALCULATE_ARR = "extra_calculate_arr"
+        val catView by lazy {
+            CatLoadingView()
+        }
     }
 
     val heSoFilter by lazy {
@@ -57,7 +62,7 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
        setSupportActionBar(toolbar)
         val supportActionBar = supportActionBar
         supportActionBar?.title = "Nhập ma trận"
-        supportActionBar?.setDefaultDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (SharePreFlag.showMain()) {
             TapTargetSequence(this).targets(
@@ -72,6 +77,7 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
     }
 
 
+
     private fun init() {
 
         val intent = intent
@@ -80,7 +86,7 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
         filterHelper = FilterHelper(width)
         // init array
         matrix = Array(height) { IntArray(width) { -1 } } // default value la -1
-        resultMatrix = matrix.copyOf()
+        resultMatrix = Array(height) { IntArray(width) { -1 } }
         calculateArr = Array(height * width) { "" }
 
 
@@ -119,6 +125,7 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
 
 
     fun startFilter() {
+
         // travel from (1,1) toi (row-1,col-1)
         if (filterTypeId == R.id.customFilter || filterTypeId == R.id.trongSo) {
 
@@ -131,8 +138,10 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
                 for (j in 1..width - 2) {
                     pixel = phepLoc.invoke(filterHelper, i, j, matrix, calculateArr,heSoFilter)
                     resultMatrix[i][j] = pixel
+                    print("")
                 }
             }
+            print("")
 
         } else {
             val phepLoc = when (filterTypeId) {
@@ -143,6 +152,7 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
                 R.id.geo -> FilterHelper::locGeo
                 R.id.dieuHoa -> FilterHelper::locDH
                 R.id.dhtp -> FilterHelper::locDHTP
+                R.id.alpha -> FilterHelper::alphaTrim
                 else -> FilterHelper::locMin
             }
             var pixel = -1
@@ -152,6 +162,7 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
                     resultMatrix[i][j] = pixel
                 }
             }
+
         }
 
 
@@ -197,11 +208,14 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
                     val intent = Intent(this, ResultActivity::class.java)
                     intent.putExtra(EXTRA_RESULT_MATRIX, resultMatrix)
                     intent.putExtra(EXTRA_CALCULATE_ARR, calculateArr)
+                    catView.setClickCancelAble(false)
+                    catView.show(supportFragmentManager,"loading")
+                    catView.setText("Đợi chút nhoa!!")
                     lifecycleScope.launch(Dispatchers.Default) {
+                        fileEdge()
                         startFilter()
                         startActivity(intent)
                     }
-
                 }
                 return true
             }
@@ -209,6 +223,20 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
         }
     }
 
+    private fun fileEdge() {
+        // hang 0, hang cuoi
+        for (i in 0..width-1) {
+            resultMatrix[0][i] = matrix[0][i]
+            resultMatrix[height-1][i] = matrix[height-1][i]
+        }
+        //cot 0 cot cuoi
+        for (i in 0..height-1) {
+            resultMatrix[i][0] = matrix[i][0]
+            resultMatrix[i][width-1] = matrix[i][width-1]
+        }
+
+
+    }
 
     private fun checkfillAll(): Boolean {
         val isFill = matrix.all { row ->

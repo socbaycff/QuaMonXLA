@@ -36,7 +36,10 @@ class FilterBottomSheet(val heSoFilter: Array<Int>, val filterHelper: FilterHelp
 
         when (mainActivity.filterTypeId) {
             R.id.customFilter -> view.filterTable.visibility = View.VISIBLE
-            R.id.qValue ->  view.qValue.visibility = View.VISIBLE
+            R.id.qValue,R.id.alpha -> {
+                filterLable.visibility = View.VISIBLE
+                view.qValue.visibility = View.VISIBLE
+            }
             else -> {}
         }
 
@@ -44,16 +47,16 @@ class FilterBottomSheet(val heSoFilter: Array<Int>, val filterHelper: FilterHelp
             mainActivity.filterTypeId = checkedId
             qValue.visibility = View.GONE
             filterTable.visibility = View.GONE
+            filterLable.visibility = View.GONE
             when (checkedId) {
                 R.id.customFilter,R.id.trongSo -> {
                     filterTable.visibility = View.VISIBLE
-                    Toast.makeText(context, "Nhập các hệ số của bộ lọc", Toast.LENGTH_SHORT).show()
+                    filterLable.visibility = View.VISIBLE
                 }
-                R.id.dhtp -> {
+                R.id.dhtp,R.id.alpha -> {
                     qValue.visibility = View.VISIBLE
                 }
                 else -> {}
-
             }
 
         }
@@ -66,6 +69,7 @@ class FilterBottomSheet(val heSoFilter: Array<Int>, val filterHelper: FilterHelp
             val string = qValue.text.toString()
             if (string != "") {
                 filterHelper.qValue = string.toInt()
+                filterHelper.dValue = string.toInt()
             }
 
         }

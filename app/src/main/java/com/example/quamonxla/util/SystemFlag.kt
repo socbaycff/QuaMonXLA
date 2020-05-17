@@ -22,19 +22,30 @@ class SharePreFlag {
         }
 
         fun showMain(): Boolean {
-            sharedPreferences.edit().putBoolean(MAIN_FLAG,false).apply()
-         return isShowMainGUide
-
-        }
+            val shouldShow = isShowMainGUide
+            if (shouldShow) {
+                sharedPreferences.edit().putBoolean(MAIN_FLAG,false).apply()
+                isShowMainGUide = false
+            }
+         return  shouldShow
+       }
 
         fun showStart(): Boolean {
-            sharedPreferences.edit().putBoolean(START_FLAG,false).apply()
-          return isShowStartGuide
+            val shouldShow = isShowStartGuide
+            if (shouldShow) {
+                sharedPreferences.edit().putBoolean(START_FLAG,false).apply()
+                isShowStartGuide = false
+            }
+            return  shouldShow
         }
 
         fun showResult(): Boolean {
-            sharedPreferences.edit().putBoolean(RESULT_FLAG,false).apply()
-           return isShowResultGuide
+            val shouldShow = isShowResultGuide
+            if (shouldShow) {
+                sharedPreferences.edit().putBoolean(RESULT_FLAG,false).apply()
+                isShowResultGuide = false
+            }
+            return  shouldShow
         }
 
     }
