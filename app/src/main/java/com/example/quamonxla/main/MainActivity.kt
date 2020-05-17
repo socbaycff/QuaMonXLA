@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
     }
 
     private lateinit var filterHelper: FilterHelper
-    private var width: Int = 0
-    private var height: Int = 0
+     var width: Int = 0
+     var height: Int = 0
     lateinit var matrix: Array<IntArray>
     lateinit var resultMatrix: Array<IntArray>
     lateinit var calculateArr: Array<String>

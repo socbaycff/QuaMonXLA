@@ -34,16 +34,28 @@ class ResultFragment : Fragment() {
 
         val resultMatrix = resultActivity.resultMatrix
 
-
-
         val rowNum = resultMatrix.size
         val colNum = resultMatrix[0].size
 
         // init table layout
         val table = v.resultTable
-        for (i in 0..colNum-1) {
+//        for (i in 0..colNum-1) {
+//            val row = TableRow(context)
+//            for (j in 0..rowNum-1) {
+//                row.addView(TextView(context).apply {
+//                    setText(resultMatrix[j][i].toString())
+//                    setBackgroundResource(R.drawable.textview_border)
+//                    width = 200
+//                    height = 200
+//                    gravity = Gravity.CENTER
+//                })
+//            }
+//
+//            table.addView(row)
+//        }
+        for (i in 0..rowNum-1) {
             val row = TableRow(context)
-            for (j in 0..rowNum-1) {
+            for (j in 0..colNum-1) {
                 row.addView(TextView(context).apply {
                     setText(resultMatrix[i][j].toString())
                     setBackgroundResource(R.drawable.textview_border)
