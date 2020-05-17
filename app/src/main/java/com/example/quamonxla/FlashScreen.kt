@@ -20,7 +20,7 @@ class FlashScreen : AppCompatActivity() {
             .withSplashTimeOut(1000)
             .withBackgroundColor(Color.parseColor("#1a1b29"))
             .withHeaderText("")
-            .withFooterText("ABCY")
+            .withFooterText("ABCXYZ")
             .withBeforeLogoText("")
             .withAfterLogoText("Phao XLA")
             .withLogo(R.mipmap.ic_launcher_round)

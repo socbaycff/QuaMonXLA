@@ -1,10 +1,12 @@
 package com.example.quamonxla.main
 
+import android.util.Log
 import ch.obermuhlner.math.big.BigDecimalMath
 import com.example.quamonxla.util.showValue
 import java.math.BigDecimal
 import java.math.MathContext
 import kotlin.math.pow
+import kotlin.math.roundToInt
 
 class FilterHelper(var colNum: Int) {
     var qValue: Int = 1
@@ -80,11 +82,12 @@ class FilterHelper(var colNum: Int) {
             str += "+ ${mauKhongGian[j].toString()}"
             sum += mauKhongGian[j]
         }
-        var avg = sum / 9
-        mangPhepTinh[x * colNum + y] = "\\([$x,$y]: \\frac{ ${str.substring(1)} }{9} = $avg\\)"
-        if (avg < 0) avg = 0
-        if (avg > 255) avg = 255
-        return avg
+        var avg = sum / 9.0
+        mangPhepTinh[x * colNum + y] = "\\([$x,$y]: \\frac{ ${str.substring(1)} }{9} = ${avg.roundToInt()}\\)"
+        if (avg < 0) avg = 0.0
+        if (avg > 255) avg = 255.0
+        Log.i("infooooo",avg.toString())
+        return avg.roundToInt()
     }
 
     fun locTrungVi(x: Int, y: Int, matrix: Array<IntArray>, mangPhepTinh: Array<String>): Int {
@@ -107,13 +110,13 @@ class FilterHelper(var colNum: Int) {
         val mauKhongGian = layMauKhongGian(matrix, x, y)
         val min = mauKhongGian.min()!!
         val max = mauKhongGian.max()!!
-        var midpoint = (max + min) / 2
+        var midpoint = (max + min) / 2.0
         mangPhepTinh[x * colNum + y] =
-            "\\([$x,$y]: Max:$max Min:$min => \\frac{$max + $min}{2} = $midpoint\\)"
+            "\\([$x,$y]: Max:$max Min:$min => \\frac{$max + $min}{2} = ${midpoint.roundToInt()}\\)"
 
-        if (midpoint < 0) midpoint = 0
-        if (midpoint > 255) midpoint = 255
-        return midpoint
+        if (midpoint < 0) midpoint = 0.0
+        if (midpoint > 255) midpoint = 255.0
+        return midpoint.roundToInt()
 
     }
 
@@ -126,11 +129,11 @@ class FilterHelper(var colNum: Int) {
             product = product.multiply(BigDecimal.valueOf(mauKhongGian[j].toLong()))
         }
         val mathContext = MathContext(25)
-        var pixel = BigDecimalMath.root(product, BigDecimal.valueOf(9.0),mathContext).toInt()
-        mangPhepTinh[x * colNum + y] = "\\([$x,$y]: \\sqrt[9]{ ${str.substring(1)} } = $pixel \\)"
-        if (pixel < 0) pixel = 0
-        if  (pixel > 255) pixel = 255
-        return pixel
+        var pixel = BigDecimalMath.root(product, BigDecimal.valueOf(9.0),mathContext).toDouble()
+        mangPhepTinh[x * colNum + y] = "\\([$x,$y]: \\sqrt[9]{ ${str.substring(1)} } = ${pixel.roundToInt()} \\)"
+        if (pixel < 0) pixel = 0.0
+        if  (pixel > 255) pixel = 255.0
+        return pixel.roundToInt()
 
     }
 
@@ -162,11 +165,11 @@ class FilterHelper(var colNum: Int) {
             str += "+ \\frac{1}{ ${mauKhongGian[j]} }"
             mauSo += (1.0 / mauKhongGian[j])
         }
-        var result = (9 / mauSo).toInt()
-        mangPhepTinh[x * colNum + y] = "\\( [$x,$y]: \\frac{9}{ ${str.substring(2)} } = $result \\)"
-        if (result < 0) result = 0
-        if (result > 255) result = 255
-        return result
+        var result = (9 / mauSo).toFloat()
+        mangPhepTinh[x * colNum + y] = "\\( [$x,$y]: \\frac{9}{ ${str.substring(2)} } = ${result.roundToInt()} \\)"
+        if (result < 0) result = 0f
+        if (result > 255) result = 255f
+        return result.roundToInt()
     }
 
     fun locDHTP(x: Int, y: Int, matrix: Array<IntArray>, mangPhepTinh: Array<String>): Int {
@@ -181,12 +184,12 @@ class FilterHelper(var colNum: Int) {
             mauSo += mauKhongGian[j].toDouble().pow(qValue)
             tuSo += mauKhongGian[j].toDouble().pow(qValue + 1)
         }
-        var result = (tuSo / mauSo).toInt()
+        var result = (tuSo / mauSo).toFloat()
         mangPhepTinh[x * colNum + y] =
-            "\\( [$x,$y]: \\frac{ ${strTu.substring(1)} }{ ${strMau.substring(1)} } = $result \\)"
-        if (result < 0) result = 0
-        if (result > 255) result = 255
-        return result
+            "\\( [$x,$y]: \\frac{ ${strTu.substring(1)} }{ ${strMau.substring(1)} } = ${result.roundToInt()} \\)"
+        if (result < 0) result = 0f
+        if (result > 255) result = 255f
+        return result.roundToInt()
     }
 
 
@@ -202,17 +205,17 @@ class FilterHelper(var colNum: Int) {
             acc + i
         }
         var str = ""
-        var sum = 0
+        var sum = 0f
         for (j in 0..8) {
             str += "+ ${filter[j]}.${mauKhongGian[j]}"
             sum += filter[j] * mauKhongGian[j] // nhan voi trong so
         }
         var avg = sum / sumWeight
         mangPhepTinh[x * colNum + y] =
-            "\\( [$x,$y]: \\frac{ ${str.substring(2)} }{ $sumWeight } = $avg \\)"
-        if (avg < 0) avg = 0
-        if (avg > 255) avg = 255
-        return avg
+            "\\( [$x,$y]: \\frac{ ${str.substring(2)} }{ $sumWeight } = ${avg.roundToInt()} \\)"
+        if (avg < 0) avg = 0f
+        if (avg > 255) avg = 255f
+        return avg.roundToInt()
     }
 
     fun locCustom(
@@ -223,17 +226,17 @@ class FilterHelper(var colNum: Int) {
         filter: Array<Int>
     ): Int {
         val mauKhongGian = layMauKhongGian(matrix, x, y)
-        var result = 0
+        var result = 0f
         var str = ""
         for (j in 0..8) {
             str += "+ ${filter[j]}.${mauKhongGian[j]}"
             result += filter[j] * mauKhongGian[j] // nhan voi trong so
         }
 
-        mangPhepTinh[x * colNum + y] = "[$x,$y]: ${str.substring(2)} = $result"
-        if (result <0) result = 0
-        if (result > 255) result = 255
-        return result
+        mangPhepTinh[x * colNum + y] = "[$x,$y]: ${str.substring(2)} = ${result.roundToInt()}"
+        if (result <0) result = 0f
+        if (result > 255) result = 255f
+        return result.roundToInt()
     }
 
 
@@ -251,12 +254,12 @@ class FilterHelper(var colNum: Int) {
            sum += sortedArray[i]
         }
 
-        var result = sum/ (9-dValue)
+        var result = sum/ (9f-dValue)
         mangPhepTinh[x * colNum + y] =
-            "\\([$x,$y]:  \\frac{ ${str.substring(1)} }{ ${9-dValue} } = $result \\)"
-        if (result <0) result = 0
-        if (result > 255) result = 255
-        return result
+            "\\([$x,$y]:  \\frac{ ${str.substring(1)} }{ ${9-dValue} } = ${result.roundToInt()} \\)"
+        if (result <0) result = 0f
+        if (result > 255) result = 255f
+        return result.roundToInt()
     }
 
 }
