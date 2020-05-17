@@ -34,11 +34,15 @@ class FilterBottomSheet(val heSoFilter: Array<Int>, val filterHelper: FilterHelp
         val mainActivity = activity as MainActivity
         filters.check(mainActivity.filterTypeId)
 
+        // mo lai cac component an hien
         when (mainActivity.filterTypeId) {
-            R.id.customFilter -> view.filterTable.visibility = View.VISIBLE
-            R.id.qValue,R.id.alpha -> {
-                filterLable.visibility = View.VISIBLE
+            R.id.customFilter,R.id.trongSo -> {
+                view.filterLable.visibility = View.VISIBLE
+                view.filterTable.visibility = View.VISIBLE
+            }
+            R.id.alpha,R.id.dhtp -> {
                 view.qValue.visibility = View.VISIBLE
+
             }
             else -> {}
         }
@@ -70,6 +74,8 @@ class FilterBottomSheet(val heSoFilter: Array<Int>, val filterHelper: FilterHelp
             if (string != "") {
                 filterHelper.qValue = string.toInt()
                 filterHelper.dValue = string.toInt()
+            } else {
+                Toast.makeText(context,"Chưa nhập tham số, sẽ sử dụng mặc định",Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -84,8 +90,8 @@ class FilterBottomSheet(val heSoFilter: Array<Int>, val filterHelper: FilterHelp
             val row = filterTable.getChildAt(i) as TableRow
             for (j in 0..row.childCount - 1) {
                 val editText = row.getChildAt(j) as EditText
-                heSoFilter[index++] = editText.text.toString().toInt()
-
+                val toString = editText.text.toString()
+                if (toString != "") heSoFilter[index++] = toString.toInt()
             }
         }
 

@@ -56,4 +56,6 @@ dependencies {
     implementation 'com.roger.catloadinglibrary:catloadinglibrary:1.0.5'
     //big de
     implementation 'ch.obermuhlner:big-math:2.3.0'
+    // flash screen
+    implementation 'gr.pantrif:easy-android-splash-screen:0.0.1'
 }

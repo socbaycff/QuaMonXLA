@@ -124,7 +124,7 @@
         android:id="@+id/filterLable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nhập hệ số bộ lọc"
+        android:text="Nhập hệ số bộ lọc 3x3"
         android:textSize="18sp"
         android:visibility="gone" />
 

@@ -3,22 +3,28 @@
     package="com.example.quamonxla">
 
     <application
-        android:allowBackup="true"
         android:name=".XLAApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".result.ResultActivity" ></activity>
-        <activity android:name=".StartActivity">
+        <activity android:name=".FlashScreen" android:theme="@style/MainTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.MainActivity" android:theme="@style/MainTheme" android:parentActivityName=".StartActivity"></activity>
+        <activity android:name=".result.ResultActivity" />
+        <activity android:name=".StartActivity">
+
+        </activity>
+        <activity
+            android:name=".main.MainActivity"
+            android:parentActivityName=".StartActivity"
+            android:theme="@style/MainTheme" />
     </application>
 
 </manifest>

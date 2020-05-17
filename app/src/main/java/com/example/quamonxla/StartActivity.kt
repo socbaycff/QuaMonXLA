@@ -3,6 +3,8 @@ package com.example.quamonxla
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
@@ -48,6 +50,24 @@ class StartActivity : AppCompatActivity() {
 
         } else {
             Toast.makeText(applicationContext,"Chưa nhập đủ",Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.start_menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.about -> {
+                Toast.makeText(applicationContext,"Make by DKhang D17CN2",Toast.LENGTH_SHORT).show()
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
 
     }
