@@ -10,12 +10,15 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TableRow
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.example.quamonxla.R
 import com.example.quamonxla.main.FilterHelper
 import com.example.quamonxla.main.HistogramSheet
 import com.example.quamonxla.main.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_result.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ResultFragment : Fragment() {
 
@@ -39,34 +42,23 @@ class ResultFragment : Fragment() {
 
         // init table layout
         val table = v.resultTable
-//        for (i in 0..colNum-1) {
-//            val row = TableRow(context)
-//            for (j in 0..rowNum-1) {
-//                row.addView(TextView(context).apply {
-//                    setText(resultMatrix[j][i].toString())
-//                    setBackgroundResource(R.drawable.textview_border)
-//                    width = 200
-//                    height = 200
-//                    gravity = Gravity.CENTER
-//                })
-//            }
-//
-//            table.addView(row)
-//        }
-        for (i in 0..rowNum-1) {
-            val row = TableRow(context)
-            for (j in 0..colNum-1) {
-                row.addView(TextView(context).apply {
-                    setText(resultMatrix[i][j].toString())
-                    setBackgroundResource(R.drawable.textview_border)
-                    width = 200
-                    height = 200
-                    gravity = Gravity.CENTER
-                })
-            }
+        lifecycleScope.launch(Dispatchers.Default) {
+            for (i in 0..rowNum-1) {
+                val row = TableRow(context)
+                for (j in 0..colNum-1) {
+                    row.addView(TextView(context).apply {
+                        setText(resultMatrix[i][j].toString())
+                        setBackgroundResource(R.drawable.textview_border)
+                        width = 200
+                        height = 200
+                        gravity = Gravity.CENTER
+                    })
+                }
 
-            table.addView(row)
+                table.addView(row)
+            }
         }
+
 
 
         v.showHist.setOnClickListener {

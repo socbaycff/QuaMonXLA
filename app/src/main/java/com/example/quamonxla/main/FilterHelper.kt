@@ -83,7 +83,7 @@ class FilterHelper(var colNum: Int) {
             sum += mauKhongGian[j]
         }
         var avg = sum / 9.0
-        mangPhepTinh[x * colNum + y] = "\\([$x,$y]: \\frac{ ${str.substring(1)} }{9} = ${avg.roundToInt()}\\)"
+        mangPhepTinh[x * colNum + y] = "[$x,$y] :\\(\\frac{ ${str.substring(1)} }{9} =\\) ${String.format("%.3f",avg)} -> ${avg.roundToInt()}"
         if (avg < 0) avg = 0.0
         if (avg > 255) avg = 255.0
         Log.i("infooooo",avg.toString())
@@ -112,7 +112,7 @@ class FilterHelper(var colNum: Int) {
         val max = mauKhongGian.max()!!
         var midpoint = (max + min) / 2.0
         mangPhepTinh[x * colNum + y] =
-            "\\([$x,$y]: Max:$max Min:$min => \\frac{$max + $min}{2} = ${midpoint.roundToInt()}\\)"
+            "[$x,$y]: Max:$max Min:$min => \\(\\frac{$max + $min}{2} =\\) ${String.format("%.3f",midpoint)} -> ${midpoint.roundToInt()}"
 
         if (midpoint < 0) midpoint = 0.0
         if (midpoint > 255) midpoint = 255.0
@@ -130,7 +130,7 @@ class FilterHelper(var colNum: Int) {
         }
         val mathContext = MathContext(25)
         var pixel = BigDecimalMath.root(product, BigDecimal.valueOf(9.0),mathContext).toDouble()
-        mangPhepTinh[x * colNum + y] = "\\([$x,$y]: \\sqrt[9]{ ${str.substring(1)} } = ${pixel.roundToInt()} \\)"
+        mangPhepTinh[x * colNum + y] = "[$x,$y]: \\(\\sqrt[9]{ ${str.substring(1)} } =\\) ${String.format("%.3f",pixel)} -> ${pixel.roundToInt()}"
         if (pixel < 0) pixel = 0.0
         if  (pixel > 255) pixel = 255.0
         return pixel.roundToInt()
@@ -165,10 +165,10 @@ class FilterHelper(var colNum: Int) {
             str += "+ \\frac{1}{ ${mauKhongGian[j]} }"
             mauSo += (1.0 / mauKhongGian[j])
         }
-        var result = (9 / mauSo).toFloat()
-        mangPhepTinh[x * colNum + y] = "\\( [$x,$y]: \\frac{9}{ ${str.substring(2)} } = ${result.roundToInt()} \\)"
-        if (result < 0) result = 0f
-        if (result > 255) result = 255f
+        var result = (9f / mauSo)
+        mangPhepTinh[x * colNum + y] = "[$x,$y]: \\(\\frac{9}{ ${str.substring(2)} } =\\) ${String.format("%.3f",result)} -> ${result.roundToInt()}"
+        if (result < 0) result = 0.0
+        if (result > 255) result = 255.0
         return result.roundToInt()
     }
 
@@ -186,7 +186,7 @@ class FilterHelper(var colNum: Int) {
         }
         var result = (tuSo / mauSo).toFloat()
         mangPhepTinh[x * colNum + y] =
-            "\\( [$x,$y]: \\frac{ ${strTu.substring(1)} }{ ${strMau.substring(1)} } = ${result.roundToInt()} \\)"
+            "[$x,$y]: \\(\\frac{ ${strTu.substring(1)} }{ ${strMau.substring(1)} } =\\) ${String.format("%.3f",result)} -> ${result.roundToInt()}"
         if (result < 0) result = 0f
         if (result > 255) result = 255f
         return result.roundToInt()
@@ -212,7 +212,7 @@ class FilterHelper(var colNum: Int) {
         }
         var avg = sum / sumWeight
         mangPhepTinh[x * colNum + y] =
-            "\\( [$x,$y]: \\frac{ ${str.substring(2)} }{ $sumWeight } = ${avg.roundToInt()} \\)"
+            "[$x,$y]: \\(\\frac{ ${str.substring(2)} }{ $sumWeight } =\\) ${String.format("%.3f",avg)} -> ${avg.roundToInt()}"
         if (avg < 0) avg = 0f
         if (avg > 255) avg = 255f
         return avg.roundToInt()
@@ -233,7 +233,7 @@ class FilterHelper(var colNum: Int) {
             result += filter[j] * mauKhongGian[j] // nhan voi trong so
         }
 
-        mangPhepTinh[x * colNum + y] = "[$x,$y]: ${str.substring(2)} = ${result.roundToInt()}"
+        mangPhepTinh[x * colNum + y] = "[$x,$y]: ${str.substring(2)} = ${String.format("%.3f",result)} -> ${result.roundToInt()}"
         if (result <0) result = 0f
         if (result > 255) result = 255f
         return result.roundToInt()
@@ -256,7 +256,7 @@ class FilterHelper(var colNum: Int) {
 
         var result = sum/ (9f-dValue)
         mangPhepTinh[x * colNum + y] =
-            "\\([$x,$y]:  \\frac{ ${str.substring(1)} }{ ${9-dValue} } = ${result.roundToInt()} \\)"
+            "[$x,$y]: \\(\\frac{ ${str.substring(1)} }{ ${9-dValue} } =\\) ${String.format("%.3f",result)} -> ${result.roundToInt()}"
         if (result <0) result = 0f
         if (result > 255) result = 255f
         return result.roundToInt()
