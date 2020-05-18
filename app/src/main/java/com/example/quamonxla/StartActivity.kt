@@ -31,8 +31,8 @@ class StartActivity : AppCompatActivity() {
 
         if (SharePreFlag.showStart()) {
             TapTargetSequence(this).targets(
-                TapTarget.forView(rowNumEditText,"1. Nhập số dòng của ma trận").cancelable(false).transparentTarget(true).drawShadow(true),
-                TapTarget.forView(colNumEditText,"2. Nhập số cột của ma trận").cancelable(false).transparentTarget(true).drawShadow(true),
+                TapTarget.forView(rowNumEditText,"1. Nhập số cột của ma trận").cancelable(false).transparentTarget(true).drawShadow(true),
+                TapTarget.forView(colNumEditText,"2. Nhập số dòng của ma trận").cancelable(false).transparentTarget(true).drawShadow(true),
                 TapTarget.forView(nextBtn,"3. Nhấn để tiếp tục nhập ma trận").cancelable(false).transparentTarget(true).drawShadow(true)
             ).start()
         }
