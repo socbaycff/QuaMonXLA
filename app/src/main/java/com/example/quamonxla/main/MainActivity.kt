@@ -204,17 +204,8 @@ class MainActivity : AppCompatActivity(), View.OnFocusChangeListener, TextWatche
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.check -> {
-                var flag = true
-              if (filterTypeId == R.id.customFilter ||  filterTypeId == R.id.trongSo) {
-                 if(!heSoFilter.all { it != -1 }) {
-                     flag = false
-                 }
-              }
-                if (!flag) {
-                    Toast.makeText(applicationContext,"Chưa nhập đủ hệ số bộ lọc",Toast.LENGTH_SHORT).show()
-                }
 
-                if (checkfillAll() && flag ) {
+                if (checkfillAll()) {
                     val intent = Intent(this, ResultActivity::class.java)
                     intent.putExtra(EXTRA_RESULT_MATRIX, resultMatrix)
                     intent.putExtra(EXTRA_CALCULATE_ARR, calculateArr)
